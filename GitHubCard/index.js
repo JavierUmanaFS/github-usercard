@@ -37,7 +37,11 @@ const mainCards = document.querySelector('.cards');
           user, and adding that card to the DOM.
 */
 
-let followersArray = [];
+const followersArray = [];
+
+
+// 'teaguehannam', 'dakoriah','ardissam0', 'kkslider2130', 'justinruss24'
+
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -73,7 +77,7 @@ function gitCard(obj){
         userBio = document.createElement('p');
 
       // Setting up structure of our elements
-      profile.append(gitAddress)
+      profile.appendChild(gitAddress);
       cardInfo.append(userName, userTag, userLocation, profile, followers, following, userBio);
       card.append(newImg, cardInfo);
 
@@ -87,14 +91,11 @@ function gitCard(obj){
       userName.textContent = obj.name;
       userTag.textContent = obj.login;
       userLocation.textContent = `Location: ${obj.location}`;
-      profile.textContent = `Profile: ${obj.gitAddress}`;
+      gitAddress.textContent = `${obj.html_url}`
+      profile.innerHTML = `Profile: <a>${obj.html_url} </a>`;
       followers.textContent = `Followers: ${obj.followers}`;
       following.textContent = `Following: ${obj.following}`;
       userBio.textContent = `Bio: ${obj.bio}`;
-
-      
-
-
 
   return card;
 }
@@ -108,33 +109,50 @@ axios.get('https://api.github.com/users/javierumanafs')
   // console.log(response.data)
   let newUser = gitCard(response.data)
   mainCards.appendChild(newUser);
- 
 })
 .catch(error =>{
   console.log('the data was not returned', error)
 });
 
+// const newCard = gitCard(response.data);
+    // mainCards.appendChild(gitCard(response));
+axios.get('https://api.github.com/users/javierumanafs/followers')
+.then(response =>{
 
-
-
-axios.get('https://api.github.com/users/JavierUmanaFS/followers')
-.then(response => {
-  console.log(response.data);
-   response.data.map(item =>{
-    mainCards.appendChild(gitCard(item))
+  response.data.forEach(user =>{
+    axios.get(`https://api.github.com/users/${user.login}`)
+    .then(response =>{
+      mainCards.appendChild(gitCard(response.data))
+    });
   })
-  // console.log()
- 
-  // followersArray = response.data;
-
 })
 .catch(error =>{
   console.log('the data was not returned', error)
 });
 
 
+// followersArray.forEach((item) =>{
+//  axios.get(`https://api.github.com/users/${item}`)
+// .then(response =>{
+  
+//   })
+//   console.log('aaa',item)
+// })
 
-console.log(friendsArray)
+
+
+// followersArray.forEach((follower) => {
+//   console.log(follower)
+//   axios.get(`https://api.github.com/users/${follower}`)
+//   .then(response =>{
+
+//   });
+ 
+// })
+
+
+// console.log(followersArray)
+
 
 
 
