@@ -1,7 +1,18 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           https://api.github.com/users/<your name>
+           https://api.github.com/users/<your name>         
 */
+    // Uncomment this
+    //  axios.get('https://api.github.com/users/javierumanafs')
+    //  .then(response =>{
+    //    console.log(response.data)
+    //    response.data.map(item =>{
+    //      mainCards.appendChild(gitCard(item))
+    //    })
+    //  })
+    //  .catch(error =>{
+    //    console.log('the data was not returned', error)
+    //  });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -14,6 +25,8 @@
            create a new component and add it to the DOM as a child of .cards
 */
 
+const mainCards = document.querySelector('.cards');
+
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -24,8 +37,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
+let followersArray = [];
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -45,6 +57,87 @@ const followersArray = [];
 </div>
 
 */
+
+function gitCard(obj){
+  //Create new elements
+  const card = document.createElement('div'),
+        newImg = document.createElement('img'),
+        cardInfo = document.createElement('cardInfo'),
+        userName = document.createElement('h3'),
+        userTag = document.createElement('p'),
+        userLocation = document.createElement('p'),
+        profile = document.createElement('p'),
+        gitAddress = document.createElement('a'),
+        followers = document.createElement('p'),
+        following = document.createElement('p'),
+        userBio = document.createElement('p');
+
+      // Setting up structure of our elements
+      profile.append(gitAddress)
+      cardInfo.append(userName, userTag, userLocation, profile, followers, following, userBio);
+      card.append(newImg, cardInfo);
+
+      // Add classes to elements
+      card.classList.add('card');
+      userName.classList.add('name');
+      userTag.classList.add('username');
+      
+      // Set text content
+      newImg.src = obj.avatar_url;
+      userName.textContent = obj.name;
+      userTag.textContent = obj.login;
+      userLocation.textContent = `Location: ${obj.location}`;
+      profile.textContent = `Profile: ${obj.gitAddress}`;
+      followers.textContent = `Followers: ${obj.followers}`;
+      following.textContent = `Following: ${obj.following}`;
+      userBio.textContent = `Bio: ${obj.bio}`;
+
+      
+
+
+
+  return card;
+}
+
+
+
+
+
+axios.get('https://api.github.com/users/javierumanafs')
+.then(response =>{
+  // console.log(response.data)
+  let newUser = gitCard(response.data)
+  mainCards.appendChild(newUser);
+ 
+})
+.catch(error =>{
+  console.log('the data was not returned', error)
+});
+
+
+
+
+axios.get('https://api.github.com/users/JavierUmanaFS/followers')
+.then(response => {
+  console.log(response.data);
+   response.data.map(item =>{
+    mainCards.appendChild(gitCard(item))
+  })
+  // console.log()
+ 
+  // followersArray = response.data;
+
+})
+.catch(error =>{
+  console.log('the data was not returned', error)
+});
+
+
+
+console.log(friendsArray)
+
+
+
 
 /* List of LS Instructors Github username's: 
   tetondan
